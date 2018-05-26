@@ -19,6 +19,8 @@
 package net.sourceforge.subsonic.security;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.StringTokenizer;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -34,6 +36,7 @@ import org.acegisecurity.AuthenticationException;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.ProviderManager;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -51,7 +54,6 @@ import net.sourceforge.subsonic.util.StringUtil;
  * Performs authentication based on credentials being present in the HTTP request parameters. Also checks
  * API versions and license information.
  * <p/>
- * The username should be set in parameter "u", and the password should be set in parameter "p".
  * The REST protocol version should be set in parameter "v".
  * <p/>
  * The password can either be in plain text or be UTF-8 hexencoded preceded by "enc:".
@@ -88,6 +90,12 @@ public class RESTRequestParameterProcessingFilter implements Filter {
 
         RESTController.ErrorCode errorCode = null;
 
+        // Internal basic auth
+        Credentials basicCreds = credentialsWithBasicAuthentication(httpRequest);
+        if(basicCreds != null) {
+            username = basicCreds.getUsername();
+            password = basicCreds.getPassword();
+        }
         // The username and credentials parameters are not required if the user
         // was previously authenticated, for example using Basic Auth.
         boolean passwordOrTokenPresent = password != null || (salt != null && token != null);
@@ -219,5 +227,53 @@ public class RESTRequestParameterProcessingFilter implements Filter {
 
     public void setLoginFailureLogger(LoginFailureLogger loginFailureLogger) {
         this.loginFailureLogger = loginFailureLogger;
+    }
+
+    private Credentials credentialsWithBasicAuthentication(HttpServletRequest req) {
+        String authHeader = req.getHeader("Authorization");
+        if (authHeader != null) {
+            StringTokenizer st = new StringTokenizer(authHeader);
+            if (st.hasMoreTokens()) {
+                String basic = st.nextToken();
+
+                if (basic.equalsIgnoreCase("Basic")) {
+                    try {
+                        String credentials = new String(Base64.decodeBase64(st.nextToken().getBytes()), "UTF-8");
+                        LOG.debug("Credentials: " + credentials);
+                        int p = credentials.indexOf(":");
+                        if (p != -1) {
+                            String login = credentials.substring(0, p).trim();
+                            String password = credentials.substring(p + 1).trim();
+
+                            return new Credentials(login, password);
+                        } else {
+                            LOG.error("Invalid authentication token");
+                        }
+                    } catch (UnsupportedEncodingException e) {
+                        LOG.warn("Couldn't retrieve authentication", e);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static class Credentials {
+        private String username;
+        private String password;
+
+        Credentials(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public String getUsername() {
+            return username;
+        }
     }
 }

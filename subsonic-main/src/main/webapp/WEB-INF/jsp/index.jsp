@@ -33,6 +33,9 @@
             $(window).resize(function () {
                 updateSize($("#playQueue").height());
             });
+	    if(window.location.hash.startsWith("#id=")){
+	        window.main.location.href="main.view?id=" + window.location.hash.substring(4);
+	    }
         }
 
     </script>

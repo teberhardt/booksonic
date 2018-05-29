@@ -97,6 +97,7 @@ public class TagService {
             }
 
             if (StringUtils.equals(artist, file.getArtist()) &&
+                StringUtils.equals(artist, file.getAlbumArtist()) &&
                 StringUtils.equals(album, file.getAlbumName()) &&
                 StringUtils.equals(title, file.getTitle()) &&
                 ObjectUtils.equals(yearNumber, file.getYear()) &&
@@ -107,8 +108,9 @@ public class TagService {
 
             MetaData newMetaData = parser.getMetaData(file.getFile());
 
-            // Note: album artist is intentionally set, as it is not user-changeable.
+            // Note: album artist is intentionally set to normal artist, as it is not user-changeable.
             newMetaData.setArtist(artist);
+            newMetaData.setAlbumArtist(artist);
             newMetaData.setAlbumName(album);
             newMetaData.setTitle(title);
             newMetaData.setYear(yearNumber);

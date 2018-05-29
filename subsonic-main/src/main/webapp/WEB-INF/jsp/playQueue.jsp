@@ -631,7 +631,7 @@
         var showAlbum = function () {
             parent.frames.main.location.href = "main.view?id=" + song.id
         };
-        $("#coverArt").attr("src", song ? "coverArt.view?id=" + song.id + "&auth=" + song.hash + "&size=80" : "");
+        $("#coverArt").attr("src", song ? "coverArt.view?id=" + song.id + "&auth=" + song.hash + "&size=80" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC");
         $("#songName").text(song && song.title ? song.title : "");
         $("#artistName").text(song && song.artist ? song.artist : "");
         $("#songName").off("click");
@@ -809,7 +809,7 @@
 
 <div class="bgcolor2" style="position:fixed; bottom:0; width:100%; z-index:2">
     <div style="display:flex; margin-top:5px; margin-bottom:7px">
-        <img id="coverArt">
+        <img id="coverArt" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC">
         <div class="ellipsis" style="flex-grow:1">
             <div id="progress"></div>
 

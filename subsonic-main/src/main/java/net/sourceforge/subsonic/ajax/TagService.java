@@ -97,7 +97,7 @@ public class TagService {
             }
 
             if (StringUtils.equals(artist, file.getArtist()) &&
-                StringUtils.equals(artist, file.getAlbumArtist()) &&
+                (StringUtils.equals(artist, file.getAlbumArtist()) || StringUtils.equals("", file.getAlbumArtist())) &&
                 StringUtils.equals(album, file.getAlbumName()) &&
                 StringUtils.equals(title, file.getTitle()) &&
                 ObjectUtils.equals(yearNumber, file.getYear()) &&

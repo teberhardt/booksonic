@@ -285,6 +285,8 @@ public class MediaScannerService {
             album.setArtist(artist);
             album.setCreated(file.getChanged());
         }
+        album.setName(file.getAlbumName());
+        album.setArtist(artist);
         if (file.getYear() != null) {
             album.setYear(file.getYear());
         }

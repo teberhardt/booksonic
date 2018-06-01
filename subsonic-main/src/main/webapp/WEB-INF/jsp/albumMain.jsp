@@ -49,6 +49,9 @@
         <c:if test="${model.showArtistInfo}">
         loadAlbumInfo();
         </c:if>
+        if(window.top.location.hash.startsWith("#id=")){
+            window.top.location.hash = "#id=${model.dir.id}";
+        }
     }
     function loadAlbumInfo() {
         multiService.getAlbumInfo(${model.dir.id}, 8, function (albumInfo) {

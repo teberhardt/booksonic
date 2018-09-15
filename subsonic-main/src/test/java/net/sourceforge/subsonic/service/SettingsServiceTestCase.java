@@ -84,75 +84,263 @@ public class SettingsServiceTestCase
     }
 
     @Test
-    public void testChangeSettings() {
-        SettingsService settingsService = new SettingsService();
+    public void testIndexString()
+    {
+        SettingsService ss = new SettingsService();
 
-        settingsService.setIndexString("indexString");
-        settingsService.setIgnoredArticles("a the foo bar");
-        settingsService.setShortcuts("new incoming \"rock 'n' roll\"");
-        settingsService.setPlaylistFolder("playlistFolder");
-        settingsService.setMusicFileTypes("mp3 ogg  aac");
-        settingsService.setCoverArtFileTypes("jpeg gif  png");
-        settingsService.setWelcomeMessage("welcomeMessage");
-        settingsService.setLoginMessage("loginMessage");
-        settingsService.setLocale(Locale.CANADA_FRENCH);
-        settingsService.setThemeId("dark");
-        settingsService.setIndexCreationInterval(4);
-        settingsService.setIndexCreationHour(9);
-        settingsService.setLicenseEmail("sindre@foo.bar.no");
-        settingsService.setLicenseCode(null);
-        settingsService.setLicenseDate(new Date(223423412351253L));
-        settingsService.setPodcastEpisodeRetentionCount(5);
-        settingsService.setPodcastEpisodeDownloadCount(-1);
-        settingsService.setPodcastFolder("d:/podcasts");
-        settingsService.setPodcastUpdateInterval(-1);
-        settingsService.setRewriteUrlEnabled(false);
-        settingsService.setLdapEnabled(true);
-        settingsService.setLdapUrl("newLdapUrl");
-        settingsService.setLdapManagerDn("admin");
-        settingsService.setLdapManagerPassword("secret");
-        settingsService.setLdapSearchFilter("newLdapSearchFilter");
-        settingsService.setLdapAutoShadowing(true);
+        ss.setIndexString("indexString");
 
-        verifySettings(settingsService);
-
-        settingsService.save();
-        verifySettings(settingsService);
-
-        verifySettings(new SettingsService());
+        assertEquals("Wrong index string.", "indexString", ss.getIndexString());
     }
 
-    private void verifySettings(SettingsService ss) {
-        assertEquals("Wrong index string.", "indexString", ss.getIndexString());
+    @Test
+    public void testIgnoredArticles()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setIgnoredArticles("a the foo bar");
+
         assertEquals("Wrong ignored articles.", "a the foo bar", ss.getIgnoredArticles());
+    }
+
+    @Test
+    public void testShortcuts()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setShortcuts("new incoming \"rock 'n' roll\"");
+
         assertEquals("Wrong shortcuts.", "new incoming \"rock 'n' roll\"", ss.getShortcuts());
-        assertTrue("Wrong ignored articles array.", Arrays.equals(new String[] {"a", "the", "foo", "bar"}, ss.getIgnoredArticlesAsArray()));
-        assertTrue("Wrong shortcut array.", Arrays.equals(new String[] {"new", "incoming", "rock 'n' roll"}, ss.getShortcutsAsArray()));
+    }
+
+    @Test
+    public void testPlaylistFolder()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setPlaylistFolder("playlistFolder");
+
         assertEquals("Wrong playlist folder.", "playlistFolder", ss.getPlaylistFolder());
+
+    }
+
+    @Test
+    public void testMusicFileTypes()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setMusicFileTypes("mp3 ogg  aac");
+
         assertEquals("Wrong music mask.", "mp3 ogg  aac", ss.getMusicFileTypes());
-        assertTrue("Wrong music mask array.", Arrays.equals(new String[] {"mp3", "ogg", "aac"}, ss.getMusicFileTypesAsArray()));
+
+    }
+
+    @Test
+    public void testCoverArtFileTypes()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setCoverArtFileTypes("jpeg gif  png");
+
         assertEquals("Wrong cover art mask.", "jpeg gif  png", ss.getCoverArtFileTypes());
-        assertTrue("Wrong cover art mask array.", Arrays.equals(new String[] {"jpeg", "gif", "png"}, ss.getCoverArtFileTypesAsArray()));
+    }
+
+    @Test
+    public void testWelcomeMessage()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setWelcomeMessage("welcomeMessage");
+
         assertEquals("Wrong welcome message.", "welcomeMessage", ss.getWelcomeMessage());
+    }
+
+
+    @Test
+    public void testLoginMessage()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLoginMessage("loginMessage");
+
         assertEquals("Wrong login message.", "loginMessage", ss.getLoginMessage());
+    }
+
+    @Test
+    public void testLocale()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLocale(Locale.CANADA_FRENCH);
+
         assertEquals("Wrong locale.", Locale.CANADA_FRENCH, ss.getLocale());
+    }
+
+    @Test
+    public void testThemeId()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setThemeId("dark");
+
         assertEquals("Wrong theme.", "dark", ss.getThemeId());
+    }
+
+    @Test
+    public void testIndexCreationInterval()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setIndexCreationInterval(4);
+
         assertEquals("Wrong index creation interval.", 4, ss.getIndexCreationInterval());
+    }
+
+    @Test
+    public void testIndexCreationHour()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setIndexCreationHour(9);
+
         assertEquals("Wrong index creation hour.", 9, ss.getIndexCreationHour());
+    }
+
+    @Test
+    public void testLicenseEmail()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLicenseEmail("sindre@foo.bar.no");
+
         assertEquals("Wrong license email.", "sindre@foo.bar.no", ss.getLicenseEmail());
+    }
+
+    @Test
+    public void testLicenseCode()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLicenseCode(null);
+
         assertEquals("Wrong license code.", null, ss.getLicenseCode());
+    }
+
+    @Test
+    public void testLicenseDate()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLicenseDate(new Date(223423412351253L));
         assertEquals("Wrong license date.", new Date(223423412351253L), ss.getLicenseDate());
+
+    }
+
+    @Test
+    public void testPodcastEpisodeRetentionCount()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setPodcastEpisodeRetentionCount(5);
         assertEquals("Wrong Podcast episode retention count.", 5, ss.getPodcastEpisodeRetentionCount());
+    }
+
+    @Test
+    public void testPodcastEpisodeDownloadCount()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setPodcastEpisodeDownloadCount(-1);
         assertEquals("Wrong Podcast episode download count.", -1, ss.getPodcastEpisodeDownloadCount());
+
+    }
+
+    @Test
+    public void testPodcastFolder()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setPodcastFolder("d:/podcasts");
         assertEquals("Wrong Podcast folder.", "d:/podcasts", ss.getPodcastFolder());
+    }
+
+    @Test
+    public void testPodcastUpdateInterval()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setPodcastUpdateInterval(-1);
         assertEquals("Wrong Podcast update interval.", -1, ss.getPodcastUpdateInterval());
+    }
+
+
+    @Test
+    public void testRewriteUrlEnabled()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setRewriteUrlEnabled(false);
         assertEquals("Wrong rewrite URL enabled.", false, ss.isRewriteUrlEnabled());
+    }
+
+    @Test
+    public void testLdapEnabled()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLdapEnabled(true);
         assertTrue("Wrong LDAP enabled.", ss.isLdapEnabled());
-        assertEquals("Wrong LDAP URL.", "newLdapUrl", ss.getLdapUrl());
+    }
+
+    @Test
+    public void testLdapManagerDn()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLdapManagerDn("admin");
         assertEquals("Wrong LDAP manager DN.", "admin", ss.getLdapManagerDn());
+    }
+
+    @Test
+    public void testLdapManagerPassword()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLdapManagerPassword("secret");
         assertEquals("Wrong LDAP manager password.", "secret", ss.getLdapManagerPassword());
+    }
+
+    @Test
+    public void testLdapSearchFilter()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLdapSearchFilter("newLdapSearchFilter");
         assertEquals("Wrong LDAP search filter.", "newLdapSearchFilter", ss.getLdapSearchFilter());
+    }
+
+    @Test
+    public void testLdapAutoShadowing()
+    {
+        SettingsService ss = new SettingsService();
+
+        ss.setLdapAutoShadowing(true);
         assertTrue("Wrong LDAP auto-shadowing.", ss.isLdapAutoShadowing());
+    }
+
+
+    @Test
+    public void testSaveWithIndexString() {
+        SettingsService ss = new SettingsService();
+        ss.setIndexString("indexString");
+
+        ss.save();
+
+        File f = new File(ss.getSubsonicHome().getAbsolutePath() + File.separator + "booksonic.properties" );
+        assertTrue("Configuration file does not exists", f.exists() );
+        assertEquals("Wrong index string.", "indexString", ss.getIndexString());
+        f.delete();
+
     }
 
 }

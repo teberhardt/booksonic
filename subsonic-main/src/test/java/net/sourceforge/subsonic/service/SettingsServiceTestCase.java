@@ -23,31 +23,45 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Unit test of {@link SettingsService}.
  *
  * @author Sindre Mehus
  */
-public class SettingsServiceTestCase extends TestCase {
+public class SettingsServiceTestCase
+{
 
-    private static final File SUBSONIC_HOME = new File("/var/booksonic");
-
-    private SettingsService settingsService;
-
-    @Override
-    protected void setUp() throws Exception {
-        System.setProperty("booksonic.home", SUBSONIC_HOME.getPath());
-        new File(SUBSONIC_HOME, "booksonic.properties").delete();
-        settingsService = new SettingsService();
-    }
-
+    @Test
     public void testSubsonicHome() {
-        assertEquals("Wrong Subsonic home.", SUBSONIC_HOME, SettingsService.getSubsonicHome());
+
+        String initialValue = System.getProperty("subsonic.home");
+        try {
+
+            File subsonicHome = new File("test");
+            System.setProperty("subsonic.home", subsonicHome.getPath());
+
+            //should reload subsonichome fromm property
+            new SettingsService();
+            assertEquals("Wrong Subsonic home.", subsonicHome, SettingsService.getSubsonicHome());
+
+        } finally {
+            if (initialValue != null) {
+                System.setProperty("subsonic.home", initialValue);
+            }
+            else {System.clearProperty("subsonic.home");}
+        }
     }
 
+    @Test
     public void testDefaultValues() {
+        SettingsService settingsService = new SettingsService();
+
         assertEquals("Wrong default language.", "en", settingsService.getLocale().getLanguage());
         assertEquals("Wrong default index creation interval.", 1, settingsService.getIndexCreationInterval());
         assertEquals("Wrong default index creation hour.", 3, settingsService.getIndexCreationHour());
@@ -69,7 +83,10 @@ public class SettingsServiceTestCase extends TestCase {
         assertEquals("Wrong default LDAP auto-shadowing.", false, settingsService.isLdapAutoShadowing());
     }
 
+    @Test
     public void testChangeSettings() {
+        SettingsService settingsService = new SettingsService();
+
         settingsService.setIndexString("indexString");
         settingsService.setIgnoredArticles("a the foo bar");
         settingsService.setShortcuts("new incoming \"rock 'n' roll\"");
@@ -125,16 +142,17 @@ public class SettingsServiceTestCase extends TestCase {
         assertEquals("Wrong license email.", "sindre@foo.bar.no", ss.getLicenseEmail());
         assertEquals("Wrong license code.", null, ss.getLicenseCode());
         assertEquals("Wrong license date.", new Date(223423412351253L), ss.getLicenseDate());
-        assertEquals("Wrong Podcast episode retention count.", 5, settingsService.getPodcastEpisodeRetentionCount());
-        assertEquals("Wrong Podcast episode download count.", -1, settingsService.getPodcastEpisodeDownloadCount());
-        assertEquals("Wrong Podcast folder.", "d:/podcasts", settingsService.getPodcastFolder());
-        assertEquals("Wrong Podcast update interval.", -1, settingsService.getPodcastUpdateInterval());
-        assertEquals("Wrong rewrite URL enabled.", false, settingsService.isRewriteUrlEnabled());
-        assertTrue("Wrong LDAP enabled.", settingsService.isLdapEnabled());
-        assertEquals("Wrong LDAP URL.", "newLdapUrl", settingsService.getLdapUrl());
-        assertEquals("Wrong LDAP manager DN.", "admin", settingsService.getLdapManagerDn());
-        assertEquals("Wrong LDAP manager password.", "secret", settingsService.getLdapManagerPassword());
-        assertEquals("Wrong LDAP search filter.", "newLdapSearchFilter", settingsService.getLdapSearchFilter());
-        assertTrue("Wrong LDAP auto-shadowing.", settingsService.isLdapAutoShadowing());
+        assertEquals("Wrong Podcast episode retention count.", 5, ss.getPodcastEpisodeRetentionCount());
+        assertEquals("Wrong Podcast episode download count.", -1, ss.getPodcastEpisodeDownloadCount());
+        assertEquals("Wrong Podcast folder.", "d:/podcasts", ss.getPodcastFolder());
+        assertEquals("Wrong Podcast update interval.", -1, ss.getPodcastUpdateInterval());
+        assertEquals("Wrong rewrite URL enabled.", false, ss.isRewriteUrlEnabled());
+        assertTrue("Wrong LDAP enabled.", ss.isLdapEnabled());
+        assertEquals("Wrong LDAP URL.", "newLdapUrl", ss.getLdapUrl());
+        assertEquals("Wrong LDAP manager DN.", "admin", ss.getLdapManagerDn());
+        assertEquals("Wrong LDAP manager password.", "secret", ss.getLdapManagerPassword());
+        assertEquals("Wrong LDAP search filter.", "newLdapSearchFilter", ss.getLdapSearchFilter());
+        assertTrue("Wrong LDAP auto-shadowing.", ss.isLdapAutoShadowing());
     }
+
 }
